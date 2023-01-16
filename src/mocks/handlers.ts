@@ -16,37 +16,37 @@ let COLUMNS: ColumnType[] = [
 
 let TASKS: TaskType[] = [
   {
-    ID: 0,
+    ID: 100,
     columnID: 0,
     name: "asdasdasdasdasdasd",
     order: 0,
   },
   {
-    ID: 1,
+    ID: 101,
     columnID: 1,
     name: "aaaaaaaaaaaaaaaaa",
     order: 0,
   },
   {
-    ID: 2,
+    ID: 102,
     columnID: 1,
     name: "cccccccccccccccccccc",
     order: 1,
   },
   {
-    ID: 3,
+    ID: 103,
     columnID: 1,
     name: "ddddddddddddddddddddd",
     order: 3,
   },
   {
-    ID: 4,
+    ID: 104,
     columnID: 1,
     name: "eeeeeeeeeeeeeeeeeee",
     order: 2,
   },
   {
-    ID: 5,
+    ID: 105,
     columnID: 0,
     name: "bbbbbbbbbbbbbbb",
     order: 1,
@@ -62,8 +62,19 @@ type GetParams = {
   ID: string;
 };
 
+type ColumnMove = {
+  sourceColumnId: number;
+  sourcePosition: number;
+  destPosition: number;
+};
+
+type ColumnkMoveParams = {
+  ID: string;
+};
+
 export const handlers = [
   rest.get<ColumnType[]>("/api/columns", async (_, res, ctx) => {
+    COLUMNS = COLUMNS.sort((a, b) => a.order - b.order);
     return res(ctx.status(200), ctx.json<ColumnType[]>(COLUMNS));
   }),
 
@@ -242,7 +253,7 @@ export const handlers = [
         return o.ID + 1;
       })
     );
-    if (taskID === -Infinity) taskID = 0;
+    if (taskID === -Infinity) taskID = 100;
 
     let taskOrder = Math.max(
       ...TASKS.map((o) => {
@@ -316,4 +327,55 @@ export const handlers = [
 
     return res(ctx.status(200));
   }),
+
+  rest.post<ColumnMove, ColumnkMoveParams>(
+    "/api/columns/:ID/move",
+    async (req, res, ctx) => {
+      const { ID } = req.params;
+      const { sourcePosition, destPosition } = await req.json<ColumnMove>();
+      const column = COLUMNS.find((b) => b.ID === +ID);
+      //console.log(column);
+      column!.order = destPosition;
+      console.log(COLUMNS);
+
+      if (sourcePosition === 0) {
+        COLUMNS.forEach((item) => {
+          if (item.order <= destPosition && item.ID !== column?.ID) {
+            item.order -= 1;
+          }
+        });
+      } else if (sourcePosition === COLUMNS.length - 1) {
+        COLUMNS.forEach((item) => {
+          if (item.order >= destPosition && item.ID !== column?.ID) {
+            item.order += 1;
+          }
+        });
+      } else {
+        if (sourcePosition < destPosition) {
+          COLUMNS.forEach((item) => {
+            if (
+              item.order >= sourcePosition &&
+              item.order <= destPosition &&
+              item.ID !== column?.ID
+            ) {
+              item.order -= 1;
+            }
+          });
+        } else {
+          COLUMNS.forEach((item) => {
+            if (
+              item.order <= sourcePosition &&
+              item.order >= destPosition &&
+              item.ID !== column?.ID
+            ) {
+              item.order += 1;
+            }
+          });
+        }
+      }
+      console.log(COLUMNS);
+
+      return res(ctx.status(200));
+    }
+  ),
 ];

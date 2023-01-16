@@ -6,6 +6,7 @@ import { BsPencil } from "react-icons/Bs";
 import TextareaAutosize from "react-textarea-autosize";
 
 const Task: React.FC<TaskProps> = (props) => {
+  const propID = props.task.ID + 1;
   const { mutate } = useDeleteTask(props.task.columnID, props.task.ID);
   const [inputValue, setInputValue] = useState(props.task.name);
   const [taskMenuvisible, setTaskMenuVisible] = useState(false);
@@ -42,7 +43,7 @@ const Task: React.FC<TaskProps> = (props) => {
   document.addEventListener("mousedown", taskMenuClose);
 
   return (
-    <Draggable draggableId={props.task.ID.toString()} index={props.index}>
+    <Draggable draggableId={propID.toString()} index={props.index} key={props.task.ID}>
       {(provided, snapshot) => {
         return (
           <div

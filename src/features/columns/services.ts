@@ -26,3 +26,12 @@ export const updateColumn = async (id: number, name: string) => {
 
   return await res.data;
 };
+
+export const moveColumn = ([columnId, sourcePosition, destPosition]: any[]) => {
+  console.log(columnId);
+
+  return axios.post(`/api/columns/${columnId}/move`, {
+    sourcePosition: sourcePosition,
+    destPosition: destPosition,
+  });
+};

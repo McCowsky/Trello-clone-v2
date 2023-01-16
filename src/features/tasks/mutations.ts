@@ -10,6 +10,7 @@ export const useMoveTask = (
   destOrder: number
 ) => {
   const queryClient = useQueryClient();
+  //console.log(destColumnId);
 
   return useMutation(
     ["movetasks", [sourceColumnId, taskId, destColumnId, sourceOrder, destOrder]],
@@ -64,7 +65,7 @@ interface MyData {
 
 export const useUpdateTaskName = (columnId: number, taskId: number) => {
   const queryClient = useQueryClient();
-  console.log("kappa");
+  // console.log("kappa");
 
   // <MyData, AxiosError, MyData>
   return useMutation<MyData, AxiosError, string>(

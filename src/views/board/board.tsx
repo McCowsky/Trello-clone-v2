@@ -3,37 +3,34 @@ import { ColumnType, ColumnDetails, TaskType } from "../../features/types";
 import { useGetColumnsData, useGetColumnData } from "../../features/columns/queries";
 import Column from "../../components/column/Column";
 import { useMoveTask } from "../../features/tasks/mutations";
-import { useAddColumn } from "../../features/columns/mutations";
+import { useAddColumn, useMoveColumn } from "../../features/columns/mutations";
 
 const Board = () => {
   const { data, error, status } = useGetColumnsData();
 
-  const { mutate } = useMoveTask(1, 2, 3, 4, 5);
+  const { mutate } = useMoveTask(100, 200, 300, 400, 500);
+  const { mutate: moveColumn } = useMoveColumn(100, 200, 300);
   const { mutate: addColumn } = useAddColumn();
 
   const newColumn = () => {
     addColumn();
   };
 
-  // const onDragStart = (start) => {
-  //   const { draggableId } = start;
-  //   console.log(draggableId);
-  //   document.getElementById(draggableId)!.style.color = "green";
-  // };
-
   const onDragEnd = (result: DropResult): void => {
-    const { source, destination, draggableId } = result;
-    if (!destination) return;
-    //if (source.index === destination.index) return;
-    mutate([
-      source.droppableId,
-      draggableId,
-      destination.droppableId,
-      source.index,
-      destination.index,
-    ]);
-
-    if (source.droppableId === destination.droppableId) {
+    const { source, destination, draggableId, type } = result;
+    if (source.index === destination?.index) return;
+    if (type === "board") {
+      moveColumn([draggableId, source.index, destination?.index]);
+    }
+    if (type === "column") {
+      if (!destination) return;
+      mutate([
+        source.droppableId,
+        draggableId,
+        destination.droppableId,
+        source.index,
+        destination.index,
+      ]);
     }
   };
 
@@ -44,9 +41,17 @@ const Board = () => {
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="flex h-full px-4">
-          {data?.data.map((column: any, index: any) => (
-            <Column column={column} index={index} key={column.ID} />
-          ))}
+          <Droppable droppableId="board" type="board" direction="horizontal">
+            {(provided, snapshot) => (
+              <div className="flex w-fit h-fit" ref={provided.innerRef}>
+                {data?.data.map((column: any, index: any) => (
+                  <Column column={column} index={index} key={column.ID} />
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+
           <button
             className="bg-white/[0.24] text-white p-1 ml-1 mr-2 w-[272px] h-10 hover:bg-white/30 text-left rounded"
             onClick={newColumn}
