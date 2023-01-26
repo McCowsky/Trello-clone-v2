@@ -1,7 +1,7 @@
-import { Router, Route, Outlet, ReactLocation, Link } from "@tanstack/react-location";
+import { Link } from "@tanstack/react-location";
 import { FaTrello } from "react-icons/Fa";
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
   return (
     <div className="w-full flex h-11 items-center text-xl font-semibold gap-1  my-0 mx-auto bg-black/[.16] text-white">
       <Link

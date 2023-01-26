@@ -1,6 +1,6 @@
-import { Router, Route, Outlet, ReactLocation, Link } from "@tanstack/react-location";
+import { Route } from "@tanstack/react-location";
 import Home from "../views/home/home";
-import Board from "../views/board/board";
+import BoardWrapper from "../views/board/boardWrapper";
 
 export const routes: Route[] = [
   {
@@ -9,6 +9,6 @@ export const routes: Route[] = [
   },
   {
     path: "Board",
-    element: <Board />,
+    element: <BoardWrapper />,
   },
 ];

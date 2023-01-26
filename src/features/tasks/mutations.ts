@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "react-query";
 import { moveTask, addTask, deleteTask, updateTask } from "./services";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 
 export const useMoveTask = (
   sourceColumnId: number,
@@ -10,7 +10,6 @@ export const useMoveTask = (
   destOrder: number
 ) => {
   const queryClient = useQueryClient();
-  //console.log(destColumnId);
 
   return useMutation(
     ["movetasks", [sourceColumnId, taskId, destColumnId, sourceOrder, destOrder]],
@@ -22,63 +21,78 @@ export const useMoveTask = (
         return { colId, destId };
       },
       onSuccess: (err, variables, context) => {
-        queryClient.invalidateQueries({
-          queryKey: ["taskscolumn", +context?.colId],
-          exact: true,
-        });
-        queryClient.invalidateQueries({
-          queryKey: ["taskscolumn", +context?.destId],
-          exact: true,
-        });
+        if (context) {
+          queryClient.invalidateQueries({
+            queryKey: ["taskscolumn", +context?.colId],
+            exact: true,
+          });
+
+          queryClient.invalidateQueries({
+            queryKey: ["taskscolumn", +context?.destId],
+            exact: true,
+          });
+        }
       },
     }
   );
 };
 
-export const useAddTask = (id: any) => {
+export const useAddTask = (id: number) => {
   const queryClient = useQueryClient();
-  return useMutation(["addtasks", id], addTask, {
-    onSuccess: () =>
-      queryClient.invalidateQueries({
-        queryKey: ["taskscolumn", id],
-        exact: true,
-      }),
-  });
+  return useMutation<number, AxiosError, number>(
+    ["addtasks", id],
+    () => {
+      return addTask(id);
+    },
+    {
+      onSuccess: () =>
+        queryClient.invalidateQueries({
+          queryKey: ["taskscolumn", id],
+          exact: true,
+        }),
+    }
+  );
 };
 
-export const useDeleteTask = (id: any, taskId: any) => {
+export const useDeleteTask = (id: number, taskId: number) => {
   const queryClient = useQueryClient();
-  return useMutation(["deltasks", [id, taskId]], deleteTask, {
-    onSuccess: () =>
-      queryClient.invalidateQueries({
-        queryKey: ["taskscolumn", id],
-        exact: true,
-      }),
-  });
+  return useMutation<number[], AxiosError, number[]>(
+    ["deltasks", [id, taskId]],
+    () => {
+      return deleteTask([id, taskId]);
+    },
+    {
+      onSuccess: () =>
+        queryClient.invalidateQueries({
+          queryKey: ["taskscolumn", id],
+          exact: true,
+        }),
+    }
+  );
 };
-
-interface MyData {
-  columnId: number;
-  taskId: number;
-  name: string;
-}
 
 export const useUpdateTaskName = (columnId: number, taskId: number) => {
   const queryClient = useQueryClient();
-  // console.log("kappa");
 
-  // <MyData, AxiosError, MyData>
-  return useMutation<MyData, AxiosError, string>(
+  return useMutation<
+    {
+      columnId: number;
+      taskId: number;
+      name: string;
+    },
+    AxiosError,
+    string
+  >(
     ["updatecolumn", [columnId, taskId, name]],
     (name) => {
       return updateTask(columnId, taskId, name);
+    },
+    {
+      onSuccess: () =>
+        queryClient.invalidateQueries({
+          queryKey: ["taskscolumn", columnId],
+          exact: true,
+        }),
     }
-    // {
-    //   onSuccess: () =>
-    //     queryClient.invalidateQueries({
-    //       queryKey: ["column", id],
-    //       exact: true,
-    //     }),
-    // }
   );
 };

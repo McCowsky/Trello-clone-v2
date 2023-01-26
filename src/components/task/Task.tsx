@@ -1,41 +1,35 @@
 import { Draggable } from "@hello-pangea/dnd";
-import { TaskProps } from "../../features/types";
-import { useDeleteTask, useUpdateTaskName } from "../../features/tasks/mutations";
+import { TaskProps } from "@/features/types";
+import { useDeleteTask, useUpdateTaskName } from "@/features/tasks/mutations";
 import { useState, useRef } from "react";
-import { BsPencil } from "react-icons/Bs";
+import { BsTrash } from "react-icons/Bs";
 import TextareaAutosize from "react-textarea-autosize";
 
-const Task: React.FC<TaskProps> = (props) => {
-  const propID = props.task.ID + 1;
-  const { mutate } = useDeleteTask(props.task.columnID, props.task.ID);
-  const [inputValue, setInputValue] = useState(props.task.name);
+const Task: React.FC<TaskProps> = ({ index, task }) => {
+  const { mutate: deleteTask } = useDeleteTask(task.columnID, task.ID);
+  const { mutate: updateTask } = useUpdateTaskName(task.columnID, task.ID);
+
+  const [inputValue, setInputValue] = useState(task.name);
   const [taskMenuvisible, setTaskMenuVisible] = useState(false);
 
-  const { mutate: updateTask } = useUpdateTaskName(props.task.columnID, props.task.ID);
-
   const ref = useRef<HTMLTextAreaElement>(null);
-  const taskMenuRef = useRef<any>(null);
+  const taskMenuRef = useRef<HTMLLIElement>(null);
 
-  const removeTask = () => {
-    mutate([props.task.columnID, props.task.ID]);
+  const removeTask = (): void => {
+    deleteTask([task.columnID, task.ID]);
   };
-  const handleFocus = (event: any) => {
-    if (inputValue !== event.target.value) updateTask(inputValue);
+  const handleFocus = (event: React.FormEvent<HTMLTextAreaElement>): void => {
+    if (task.name !== event.currentTarget.value) updateTask(inputValue);
   };
-  const handleChange = (event: any) => {
-    setInputValue(event.target.value);
-  };
-
-  const focus = () => {
-    if (ref.current) ref.current.focus();
-    setTaskMenuVisible((prev) => !prev);
+  const handleChange = (event: React.FormEvent<HTMLTextAreaElement>): void => {
+    setInputValue(event.currentTarget.value);
   };
 
-  const taskMenuClose = (e: any) => {
+  const taskMenuClose = (event: any): void => {
     if (
       taskMenuRef.current &&
       taskMenuvisible &&
-      !taskMenuRef.current.contains(e.target)
+      !taskMenuRef.current.contains(event.target)
     ) {
       setTaskMenuVisible(false);
     }
@@ -43,7 +37,7 @@ const Task: React.FC<TaskProps> = (props) => {
   document.addEventListener("mousedown", taskMenuClose);
 
   return (
-    <Draggable draggableId={propID.toString()} index={props.index} key={props.task.ID}>
+    <Draggable draggableId={task.ID.toString()} index={index} key={task.ID}>
       {(provided, snapshot) => {
         return (
           <div
@@ -52,7 +46,7 @@ const Task: React.FC<TaskProps> = (props) => {
             {...provided.dragHandleProps}
             style={{
               backgroundColor: snapshot.isDragging ? "transparent" : "white",
-              boxShadow: snapshot.isDragging ? "" : "0 1px 0 0 rgba(23, 43, 77, 1)",
+              boxShadow: snapshot.isDragging ? "" : "0 1px 0 0 rgba(9, 30, 66, )",
               ...provided.draggableProps.style,
             }}
             className="mb-2 w-full  text-[#172B4D]  rounded bg-yellow-400 grid h-full mr-[-100px]"
@@ -68,52 +62,18 @@ const Task: React.FC<TaskProps> = (props) => {
                 //backgroundColor: snapshot.isDragging ? "white" : "",
                 transform: snapshot.isDragging ? "rotate(5deg)" : "",
               }}
-              className=" w-full h-full p-2 hover:bg-[#091e4214] bh-white  flex  rounded items-center justify-between "
+              className=" w-full h-full p-2 hover:bg-[#091e4214]  bg-white  flex  rounded items-center justify-between "
             >
-              {/* <input
-                type="text"
-                ref={ref}
-                value={inputValue}
-                onBlur={handleFocus}
-                onChange={handleChange}
-                className="bg-inherit"
-                autoFocus
-              /> */}
               <TextareaAutosize
-                name=""
-                id=""
                 rows={1}
                 ref={ref}
                 value={inputValue}
                 onBlur={handleFocus}
                 onChange={handleChange}
-                className="bg-inherit w-48"
+                className="bg-inherit w-48 resize-none outline-none focus:shadow-[0_0_0_2px_rgba(0,121,191,1)] rounded-[3px] text-[#5e6c84]"
                 autoFocus
               />
-              <BsPencil className="" onClick={removeTask} />
-              {/* <ul
-                onClick={removeTask}
-                className=" pointer-events-auto pt-1 pr-2 h-full overflow-visible z-30 "
-                ref={taskMenuRef}
-              >
-                <li className="relative w-fit h-fit flex bg-red-400 items-center z-30">
-                  <BsPencil className="" />
-                  {/* <ul
-                    className="absolute left-2 top-0  z-20 bg-black text-white p-2 w-fit "
-                    style={
-                      {
-                        // visibility: taskMenuvisible ? "visible" : "hidden",
-                        // display: taskMenuvisible ? "block" : "none",
-                        // opacity: taskMenuvisible ? 1 : 0,
-                      }
-                    }
-                  >
-                    <li onClick={removeTask} className="">
-                      Delete
-                    </li>
-                  </ul> 
-                </li>
-              </ul> */}
+              <BsTrash className="" onClick={removeTask} />
             </div>
           </div>
         );

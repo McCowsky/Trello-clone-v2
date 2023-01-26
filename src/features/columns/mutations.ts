@@ -1,37 +1,50 @@
-import { AxiosError } from "axios";
-import { QueryClient, useMutation, useQueryClient } from "react-query";
+import { AxiosError, AxiosResponse } from "axios";
+import { useMutation, useQueryClient } from "react-query";
+import { ColumnMove, ColumnType } from "../types";
 import { addColumn, deleteColumn, updateColumn, moveColumn } from "./services";
 
 export const useAddColumn = () => {
   const queryClient = useQueryClient();
 
-  return useMutation("addcolumn", addColumn, {
-    onSuccess: () => queryClient.invalidateQueries(["columns"]),
-  });
+  return useMutation<number, AxiosError>(
+    "addcolumn",
+    () => {
+      return addColumn();
+    },
+    {
+      onSuccess: () => queryClient.invalidateQueries(["columns"]),
+    }
+  );
 };
 
 export const useDeleteColumn = (id: number) => {
   const queryClient = useQueryClient();
 
-  return useMutation(["delcolumn", id], deleteColumn, {
-    onSuccess: () =>
-      queryClient.invalidateQueries({
-        queryKey: ["columns"],
-        exact: true,
-      }),
-  });
+  return useMutation<number, AxiosError, number>(
+    ["delcolumn", id],
+    () => {
+      return deleteColumn(id);
+    },
+    {
+      onSuccess: () =>
+        queryClient.invalidateQueries({
+          queryKey: ["columns"],
+          exact: true,
+        }),
+    }
+  );
 };
-interface MyData {
-  id: number;
-  name: string;
-}
 
 export const useUpdateColumnName = (id: number) => {
   const queryClient = useQueryClient();
-  //console.log("kappa");
-
-  // <MyData, AxiosError, MyData>
-  return useMutation<MyData, AxiosError, string>(
+  return useMutation<
+    {
+      id: number;
+      name: string;
+    },
+    AxiosError,
+    string
+  >(
     ["updatecolumn", [id, name]],
     (name) => {
       return updateColumn(id, name);
@@ -39,18 +52,21 @@ export const useUpdateColumnName = (id: number) => {
     {
       onSuccess: () =>
         queryClient.invalidateQueries({
-          queryKey: ["column", id],
+          queryKey: ["columns"],
           exact: true,
         }),
     }
   );
 };
 
-export const useMoveColumn = (columnId: any, sourcePosition: any, destPosition: any) => {
+export const useMoveColumn = (
+  columnId: number,
+  sourcePosition: number,
+  destPosition: number
+) => {
   const queryClient = useQueryClient();
-  //console.log(destPosition);
 
-  return useMutation(
+  return useMutation<ColumnMove, AxiosError, any>(
     ["movecolumn", [columnId, sourcePosition, destPosition]],
     moveColumn,
     {
