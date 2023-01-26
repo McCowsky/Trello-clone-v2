@@ -6,7 +6,7 @@ const location = new ReactLocation();
 
 const App: React.FC = () => {
   return (
-    <div className="h-full bg-[#0079BF] min-w-full w-fit flex flex-col">
+    <div className="h-full bg-bg_blue min-w-full w-fit flex flex-col">
       <Router routes={routes} location={location}>
         <Navbar />
         <div className=" h-full w-full ">

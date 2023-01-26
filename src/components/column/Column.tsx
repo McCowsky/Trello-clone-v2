@@ -63,9 +63,9 @@ const Column: React.FC<ColumnProps> = ({ index, column }) => {
               transform: snapshot.isDragging ? "rotate(5deg)" : "",
             }}
           >
-            <div className="ml-1 mr-1 bg-[#ebecf0] rounded">
+            <div className="ml-1 mr-1 bg-bg_column rounded">
               <div
-                className="px-2 py-1  flex justify-between"
+                className="px-2 py-1 flex justify-between"
                 {...provided.dragHandleProps}
               >
                 <input
@@ -73,11 +73,11 @@ const Column: React.FC<ColumnProps> = ({ index, column }) => {
                   value={inputValue}
                   onBlur={handleFocus}
                   onChange={handleChange}
-                  className="bg-[#ebecf0] pl-2 h-7 w-full outline-none focus:shadow-[0_0_0_2px_rgba(0,121,191,1)] rounded-[3px] py-[2px]"
+                  className="bg-bg_column pl-2 h-7 w-full outline-none focus:shadow-[0_0_0_2px_rgba(0,121,191,1)] rounded-[3px] py-[2px]"
                   autoFocus
                 />
                 <ul
-                  className="flex justify-center items-center px-2 w-8 h-8 hover:bg-[#091e4214] rounded"
+                  className="flex justify-center items-center px-2 w-8 h-8 hover:bg-hover_grey_darker rounded"
                   onClick={columnMenu}
                 >
                   <li
@@ -93,7 +93,7 @@ const Column: React.FC<ColumnProps> = ({ index, column }) => {
                       }}
                     >
                       <li>
-                        <ul className="flex justify-between border-b-[1px] border-[#091e4221] mx-3 text-[#5e6c84]">
+                        <ul className="flex justify-between border-b-[1px] border-border_grey mx-3 text-text_grey">
                           <li></li>
                           <li className="h-10 flex justify-center items-center text-center">
                             List actions
@@ -104,13 +104,13 @@ const Column: React.FC<ColumnProps> = ({ index, column }) => {
                         </ul>
                       </li>
                       <li
-                        className="h-8 flex items-center mx-3 hover:bg-[#091e4214] mt-2 text-[#5e6c84]"
+                        className="h-8 flex items-center mx-3 hover:bg-hover_grey_darker mt-2 text-text_grey"
                         onClick={newTask}
                       >
                         Add card
                       </li>
                       <li
-                        className="h-8 flex items-center mx-3 hover:bg-[#091e4214] mb-2 text-[#5e6c84]"
+                        className="h-8 flex items-center mx-3 hover:bg-hover_grey_darker mb-2 text-text_grey"
                         onClick={delColumn}
                       >
                         Delete list
@@ -126,9 +126,11 @@ const Column: React.FC<ColumnProps> = ({ index, column }) => {
                       {...provided.droppableProps}
                       ref={provided.innerRef}
                       style={{
-                        background: snapshot.isDraggingOver ? "#091e4214" : "#ebecf0",
+                        background: snapshot.isDraggingOver
+                          ? "hover_grey_darker"
+                          : "bg_column",
                       }}
-                      className="  min-h-[5px] h-fit max-h-[calc(100vh-185px)]  px-2 overflow-y-auto"
+                      className="min-h-[5px] h-fit max-h-[calc(100vh-185px)] px-2 overflow-y-auto"
                     >
                       {data?.data.tasks.map((task: TaskType, index: number) => (
                         <Task task={task} index={index} key={task.ID} />
@@ -138,10 +140,10 @@ const Column: React.FC<ColumnProps> = ({ index, column }) => {
                   )}
                 </Droppable>
                 <button
-                  className="text-left mx-2 px-2 py-1 h-[28px] hover:bg-[#091e4214] rounded-sm mb-2 flex items-center"
+                  className="text-left mx-2 px-2 py-1 h-[28px] hover:bg-hover_grey_darker rounded-sm mb-2 flex items-center"
                   onClick={newTask}
                 >
-                  <span className="text-2xl text-[#5e6c84]">
+                  <span className="text-2xl text-text_grey">
                     + <span className="text-sm ">Add card</span>
                   </span>
                 </button>

@@ -46,10 +46,10 @@ const Task: React.FC<TaskProps> = ({ index, task }) => {
             {...provided.dragHandleProps}
             style={{
               backgroundColor: snapshot.isDragging ? "transparent" : "white",
-              boxShadow: snapshot.isDragging ? "" : "0 1px 0 0 rgba(9, 30, 66, )",
+              boxShadow: snapshot.isDragging ? "" : "0 1px 0 0 rgba(9, 30, 66, 0.13 )",
               ...provided.draggableProps.style,
             }}
-            className="mb-2 w-full  text-[#172B4D]  rounded bg-yellow-400 grid h-full mr-[-100px]"
+            className="mb-2 w-full  text-text_grey_darker  rounded grid h-full mr-[-100px]"
           >
             <div
               style={{
@@ -59,10 +59,9 @@ const Task: React.FC<TaskProps> = ({ index, task }) => {
                   : snapshot.isDragging
                   ? "white"
                   : "",
-                //backgroundColor: snapshot.isDragging ? "white" : "",
                 transform: snapshot.isDragging ? "rotate(5deg)" : "",
               }}
-              className=" w-full h-full p-2 hover:bg-[#091e4214]  bg-white  flex  rounded items-center justify-between "
+              className="w-full h-full p-2 hover:bg-hover_grey_darker  bg-white flex rounded items-center justify-between"
             >
               <TextareaAutosize
                 rows={1}
@@ -70,7 +69,7 @@ const Task: React.FC<TaskProps> = ({ index, task }) => {
                 value={inputValue}
                 onBlur={handleFocus}
                 onChange={handleChange}
-                className="bg-inherit w-48 resize-none outline-none focus:shadow-[0_0_0_2px_rgba(0,121,191,1)] rounded-[3px] text-[#5e6c84]"
+                className="bg-inherit w-48 resize-none outline-none focus:shadow-[0_0_0_2px_rgba(0,121,191,1)] rounded-[3px] text-text_grey"
                 autoFocus
               />
               <BsTrash className="" onClick={removeTask} />

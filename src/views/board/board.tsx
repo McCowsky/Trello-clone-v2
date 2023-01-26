@@ -59,7 +59,7 @@ const Board: React.FC<BoardProps> = ({ columnData, boardData }) => {
           value={inputValue}
           onBlur={handleFocus}
           onChange={handleChange}
-          className="bg-inherit text-white hover:bg-[#ffffff4d] active:bg-[#ffffff66] focus:bg-[#ffffff66] outline-none px-3 text-lg"
+          className="bg-inherit text-white hover:bg-hover_grey active:bg-[#ffffff66] focus:bg-[#ffffff66] outline-none px-3 text-lg"
         />
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
