@@ -43,9 +43,7 @@ export type TaskMove = {
 };
 
 export type ColumnMove = {
-  sourceColumnId: number;
-  sourcePosition: number;
-  destPosition: number;
+  [sourceColumnId: number, sourcePosition: number, destPosition: number];
 };
 
 export type Params = {

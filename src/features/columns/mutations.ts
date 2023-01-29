@@ -66,7 +66,7 @@ export const useMoveColumn = (
 ) => {
   const queryClient = useQueryClient();
 
-  return useMutation<ColumnMove, AxiosError, any>(
+  return useMutation<ColumnMove, AxiosError, ColumnMove[]>(
     ["movecolumn", [columnId, sourcePosition, destPosition]],
     moveColumn,
     {

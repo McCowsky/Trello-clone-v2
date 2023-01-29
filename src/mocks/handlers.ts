@@ -334,7 +334,7 @@ export const handlers = [
     "/api/columns/:ID/move",
     async (req, res, ctx) => {
       const { ID } = req.params;
-      const { sourcePosition, destPosition } = await req.json<ColumnMove>();
+      const { sourcePosition, destPosition } = await req.json();
       const column: ColumnType | undefined = COLUMNS.find((b) => b.ID === +ID);
       column!.order = destPosition;
 
