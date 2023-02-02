@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [react()],
   base: "/Trello-clone/",
   build: {
+    chunkSizeWarningLimit: 1600,
     outDir: "build",
   },
   resolve: {
