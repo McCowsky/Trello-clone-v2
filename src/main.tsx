@@ -15,9 +15,9 @@ const queryClient = new QueryClient({
 });
 
 worker.start({
-  // serviceWorker: {
-  //   url: "/Trello-clone/mockServiceWorker.js",
-  // },
+  serviceWorker: {
+    url: "/Trello-clone-v2/mockServiceWorker.js",
+  },
 });
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

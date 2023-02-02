@@ -6,11 +6,13 @@ import { useAddTask } from "@/features/tasks/mutations";
 import { BiDotsHorizontalRounded, BiRepost } from "react-icons/Bi";
 import { useState, useRef } from "react";
 import { useDeleteColumn, useUpdateColumnName } from "@/features/columns/mutations";
+import TextareaAutosize from "react-textarea-autosize";
 
 const Column: React.FC<ColumnProps> = ({ index, column }) => {
   const { data, status } = useGetTaskData(column.ID);
   const [columnMenuVisible, setColumnMenuVisible] = useState(false);
   const columnMenuRef = useRef<HTMLLIElement>(null);
+  const ref = useRef<HTMLTextAreaElement>(null);
 
   const [inputValue, setInputValue] = useState(column.name);
 
@@ -26,11 +28,11 @@ const Column: React.FC<ColumnProps> = ({ index, column }) => {
     setColumnMenuVisible((prev) => !prev);
   };
 
-  const columnMenuClose = (event: any): void => {
+  const columnMenuClose = (event: MouseEvent): void => {
     if (
       columnMenuRef.current &&
       columnMenuVisible &&
-      !columnMenuRef.current.contains(event.target)
+      !columnMenuRef.current.contains(event.target as Node)
     ) {
       setColumnMenuVisible(false);
     }
@@ -40,10 +42,10 @@ const Column: React.FC<ColumnProps> = ({ index, column }) => {
   const delColumn = (): void => {
     deleteColumn(column.ID);
   };
-  const handleFocus = (event: React.FormEvent<HTMLInputElement>): void => {
+  const handleFocus = (event: React.FormEvent<HTMLTextAreaElement>): void => {
     if (column.name !== event.currentTarget.value) updateColumn(inputValue);
   };
-  const handleChange = (event: React.FormEvent<HTMLInputElement>): void => {
+  const handleChange = (event: React.FormEvent<HTMLTextAreaElement>): void => {
     setInputValue(event.currentTarget.value);
   };
 
@@ -68,8 +70,9 @@ const Column: React.FC<ColumnProps> = ({ index, column }) => {
                 className="px-2 py-1 flex justify-between"
                 {...provided.dragHandleProps}
               >
-                <input
-                  type="text"
+                <TextareaAutosize
+                  rows={1}
+                  ref={ref}
                   value={inputValue}
                   onBlur={handleFocus}
                   onChange={handleChange}

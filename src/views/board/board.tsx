@@ -1,7 +1,6 @@
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import { ColumnType, BoardProps } from "@/features/types";
 import { useChangeBoardName } from "@/features/board/mutations";
-
 import Column from "@/components/column/Column";
 import { useMoveTask } from "@/features/tasks/mutations";
 import { useAddColumn, useMoveColumn } from "@/features/columns/mutations";

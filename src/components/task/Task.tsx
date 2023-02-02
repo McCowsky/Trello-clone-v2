@@ -8,9 +8,9 @@ import TextareaAutosize from "react-textarea-autosize";
 const Task: React.FC<TaskProps> = ({ index, task }) => {
   const { mutate: deleteTask } = useDeleteTask(task.columnID, task.ID);
   const { mutate: updateTask } = useUpdateTaskName(task.columnID, task.ID);
-
   const [inputValue, setInputValue] = useState(task.name);
   const [taskMenuvisible, setTaskMenuVisible] = useState(false);
+  const [trashVisible, setTrashVisible] = useState(false);
 
   const ref = useRef<HTMLTextAreaElement>(null);
   const taskMenuRef = useRef<HTMLLIElement>(null);
@@ -25,16 +25,9 @@ const Task: React.FC<TaskProps> = ({ index, task }) => {
     setInputValue(event.currentTarget.value);
   };
 
-  const taskMenuClose = (event: any): void => {
-    if (
-      taskMenuRef.current &&
-      taskMenuvisible &&
-      !taskMenuRef.current.contains(event.target)
-    ) {
-      setTaskMenuVisible(false);
-    }
+  const trashChange = () => {
+    setTrashVisible((prev) => !prev);
   };
-  document.addEventListener("mousedown", taskMenuClose);
 
   return (
     <Draggable draggableId={task.ID.toString()} index={index} key={task.ID}>
@@ -52,6 +45,8 @@ const Task: React.FC<TaskProps> = ({ index, task }) => {
             className="mb-2 w-full  text-text_grey_darker  rounded grid h-full mr-[-100px]"
           >
             <div
+              onMouseOver={trashChange}
+              onMouseOut={trashChange}
               style={{
                 pointerEvents: taskMenuvisible ? "none" : "auto",
                 backgroundColor: taskMenuvisible
@@ -72,7 +67,11 @@ const Task: React.FC<TaskProps> = ({ index, task }) => {
                 className="bg-inherit w-48 resize-none outline-none focus:shadow-[0_0_0_2px_rgba(0,121,191,1)] rounded-[3px] text-text_grey"
                 autoFocus
               />
-              <BsTrash className="" onClick={removeTask} />
+              <BsTrash
+                className=""
+                onClick={removeTask}
+                style={{ visibility: trashVisible ? "visible" : "hidden" }}
+              />
             </div>
           </div>
         );
