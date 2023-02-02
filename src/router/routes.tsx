@@ -4,7 +4,7 @@ import BoardWrapper from "../views/board/boardWrapper";
 
 export const routes: Route[] = [
   {
-    path: "/",
+    path: "/Trello-clone-v2",
     element: <Home />,
   },
   {
