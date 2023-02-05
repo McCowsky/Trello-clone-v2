@@ -23,7 +23,7 @@ const ColumnNameInput: React.FC<{ columnName: string; columnId: number }> = ({
       value={inputValue}
       onBlur={handleFocus}
       onChange={handleChange}
-      className="bg-bg_column pl-2 h-7 w-full outline-none focus:shadow-[0_0_0_2px_rgba(0,121,191,1)] rounded-[3px] py-[2px]"
+      className="bg-bg_column pl-2 h-7 w-full outline-none focus:shadow-[0_0_0_2px_rgba(0,121,191,1)] rounded-[3px] py-[2px] resize-none"
       autoFocus
     />
   );

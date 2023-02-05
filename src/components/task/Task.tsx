@@ -1,31 +1,20 @@
 import { Draggable } from "@hello-pangea/dnd";
 import { TaskType } from "@/features/types";
-import { useDeleteTask, useUpdateTaskName } from "@/features/tasks/mutations";
+import { useDeleteTask } from "@/features/tasks/mutations";
 import { useState, useRef } from "react";
 import { BsTrash } from "react-icons/Bs";
-import TextareaAutosize from "react-textarea-autosize";
+import TaskInput from "./components/TaskInput";
 
 const Task: React.FC<{
   index: number;
   task: TaskType;
 }> = ({ index, task }) => {
   const { mutate: deleteTask } = useDeleteTask(task.columnID, task.ID);
-  const { mutate: updateTask } = useUpdateTaskName(task.columnID, task.ID);
-  const [inputValue, setInputValue] = useState(task.name);
   const [taskMenuvisible, setTaskMenuVisible] = useState(false);
   const [trashVisible, setTrashVisible] = useState(false);
 
-  const ref = useRef<HTMLTextAreaElement>(null);
-  const taskMenuRef = useRef<HTMLLIElement>(null);
-
   const removeTask = (): void => {
     deleteTask([task.columnID, task.ID]);
-  };
-  const handleFocus = (event: React.FormEvent<HTMLTextAreaElement>): void => {
-    if (task.name !== event.currentTarget.value) updateTask(inputValue);
-  };
-  const handleChange = (event: React.FormEvent<HTMLTextAreaElement>): void => {
-    setInputValue(event.currentTarget.value);
   };
 
   const trashChange = () => {
@@ -61,15 +50,7 @@ const Task: React.FC<{
               }}
               className="w-full h-full p-2 hover:bg-hover_grey_darker  bg-white flex rounded items-center justify-between"
             >
-              <TextareaAutosize
-                rows={1}
-                ref={ref}
-                value={inputValue}
-                onBlur={handleFocus}
-                onChange={handleChange}
-                className="bg-inherit w-48 resize-none outline-none focus:shadow-[0_0_0_2px_rgba(0,121,191,1)] rounded-[3px] text-text_grey"
-                autoFocus
-              />
+              <TaskInput columnId={task.columnID} taskId={task.ID} taskName={task.name} />
               <BsTrash
                 className=""
                 onClick={removeTask}
