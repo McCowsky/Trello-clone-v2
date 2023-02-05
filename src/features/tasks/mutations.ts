@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "react-query";
 import { moveTask, addTask, deleteTask, updateTask } from "./services";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosError } from "axios";
 
 export const useMoveTask = (
   sourceColumnId: number,
