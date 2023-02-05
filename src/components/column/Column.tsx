@@ -1,12 +1,13 @@
 import { ColumnType, TaskType } from "../../features/types";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { useGetTaskData } from "@/features/tasks/queries";
-import Task from "../task/Task";
-import { useAddTask } from "@/features/tasks/mutations";
 import { BiDotsHorizontalRounded, BiRepost } from "react-icons/Bi";
 import { useState, useRef, useEffect } from "react";
 import { useDeleteColumn } from "@/features/columns/mutations";
 import ColumnNameInput from "./components/ColumnNameInput";
+import NewTaskButton from "./components/NewTaskButton";
+import { useAddTask } from "@/features/tasks/mutations";
+import ColumnDropArea from "./components/ColumnDropArea";
 
 const Column: React.FC<{
   index: number;
@@ -15,12 +16,8 @@ const Column: React.FC<{
   const { data, status } = useGetTaskData(column.ID);
   const [columnMenuVisible, setColumnMenuVisible] = useState(false);
   const columnMenuRef = useRef<HTMLLIElement>(null);
-  const { mutate: addTask } = useAddTask(column.ID);
   const { mutate: deleteColumn } = useDeleteColumn(column.ID);
-
-  const newTask = (): void => {
-    addTask(column.ID);
-  };
+  const { mutate: addTask } = useAddTask(column.ID);
 
   const columnMenu = (): void => {
     setColumnMenuVisible((prev) => !prev);
@@ -42,6 +39,9 @@ const Column: React.FC<{
 
   const delColumn = (): void => {
     deleteColumn(column.ID);
+  };
+  const newTask = (): void => {
+    addTask(column.ID);
   };
 
   return status === "success" ? (
@@ -111,33 +111,8 @@ const Column: React.FC<{
                 </ul>
               </div>
               <div className="flex flex-col">
-                <Droppable droppableId={column.ID.toString()} type="column">
-                  {(provided, snapshot) => (
-                    <div
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                      style={{
-                        background: snapshot.isDraggingOver
-                          ? "hover_grey_darker"
-                          : "bg_column",
-                      }}
-                      className="min-h-[5px] h-fit max-h-[calc(100vh-185px)] px-2 overflow-y-auto"
-                    >
-                      {data?.data.tasks.map((task: TaskType, index: number) => (
-                        <Task task={task} index={index} key={task.ID} />
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-                <button
-                  className="text-left mx-2 px-2 py-1 h-[28px] hover:bg-hover_grey_darker rounded-sm mb-2 flex items-center"
-                  onClick={newTask}
-                >
-                  <span className="text-2xl text-text_grey">
-                    + <span className="text-sm ">Add card</span>
-                  </span>
-                </button>
+                <ColumnDropArea columnId={column.ID} data={data} />
+                <NewTaskButton columnId={column.ID} newTask={newTask} />
               </div>
             </div>
           </div>
