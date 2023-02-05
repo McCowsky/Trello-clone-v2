@@ -1,41 +1,44 @@
 import axios from "axios";
 import { QueryFunctionContext } from "react-query";
+import { ColumnDetails, TaskMove } from "../types";
 
 export const getTasks = (id: QueryFunctionContext) => {
-  return axios.get(`/api/columns/${id.queryKey[1]}`);
+  return axios.get<ColumnDetails>(`/api/columns/${id.queryKey[1]}`);
 };
 
-export const moveTask = ([
+export const moveTask = async ([
   sourceColumnId,
   taskId,
   destColumnId,
   sourceOrder,
   destOrder,
-]: number[]) => {
-  return axios.post(`/api/columns/${sourceColumnId}/tasks/${taskId}/move`, {
+]: TaskMove[]) => {
+  const res = await axios.post(`/api/columns/${sourceColumnId}/tasks/${taskId}/move`, {
     destinationColumnID: destColumnId,
     taskPositionInSource: sourceOrder,
     taskPositionInDest: destOrder,
   });
+  return res.data;
 };
 
 export const addTask = async (id: number) => {
-  const res = await axios.post(`/api/columns/${id}/tasks`);
+  const res = await axios.post<number>(`/api/columns/${id}/tasks`);
   return await res.data;
 };
 
 export const deleteTask = async ([id, taskId]: number[]) => {
-  const res = await axios.delete(`/api/columns/${id}/tasks/${taskId}`);
+  const res = await axios.delete<number[]>(`/api/columns/${id}/tasks/${taskId}`);
   return await res.data;
 };
 
 export const updateTask = async (columnId: number, taskId: number, name: string) => {
-  console.log("alfa");
-
-  const res = await axios.patch(`/api/columns/${columnId}/tasks/${taskId}`, {
+  const res = await axios.patch<{
+    columnId: number;
+    taskId: number;
+    name: string;
+  }>(`/api/columns/${columnId}/tasks/${taskId}`, {
     name: name,
   });
-  //console.log(res.data);
 
   return await res.data;
 };

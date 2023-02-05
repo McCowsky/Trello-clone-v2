@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "react-query";
 import { moveTask, addTask, deleteTask, updateTask } from "./services";
 import { AxiosError } from "axios";
+import { TaskMove } from "../types";
 
 export const useMoveTask = (
   sourceColumnId: number,
@@ -11,7 +12,7 @@ export const useMoveTask = (
 ) => {
   const queryClient = useQueryClient();
 
-  return useMutation(
+  return useMutation<TaskMove, AxiosError, TaskMove[]>(
     ["movetasks", [sourceColumnId, taskId, destColumnId, sourceOrder, destOrder]],
     moveTask,
     {
@@ -20,15 +21,15 @@ export const useMoveTask = (
         const destId = params[2];
         return { colId, destId };
       },
-      onSuccess: (err, variables, context) => {
-        if (context) {
+      onSuccess: (data) => {
+        if (data) {
           queryClient.invalidateQueries({
-            queryKey: ["taskscolumn", +context?.colId],
+            queryKey: ["taskscolumn", Object.values(data)[0]],
             exact: true,
           });
 
           queryClient.invalidateQueries({
-            queryKey: ["taskscolumn", +context?.destId],
+            queryKey: ["taskscolumn", Object.values(data)[2]],
             exact: true,
           });
         }
