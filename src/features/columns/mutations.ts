@@ -1,4 +1,4 @@
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { ColumnMove, ColumnType } from "../types";
 import { addColumn, deleteColumn, updateColumn, moveColumn } from "./services";

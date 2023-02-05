@@ -1,9 +1,18 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { useQuery } from "react-query";
 import { getColumns, getColumn } from "./services";
+import {
+  ColumnType,
+  ColumnDetails,
+  TaskType,
+  TaskMove,
+  ColumnMove,
+  BoardType,
+  Params,
+} from "../types";
 
 export const useGetColumnsData = () => {
-  return useQuery<AxiosResponse, AxiosError>("columns", () => {
+  return useQuery<AxiosResponse<ColumnType[]>, AxiosError>("columns", () => {
     return getColumns();
   });
 };
