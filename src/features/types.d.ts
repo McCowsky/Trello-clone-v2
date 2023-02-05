@@ -19,16 +19,6 @@ export type BoardType = {
   name: string;
 };
 
-export type ColumnProps = {
-  index: number;
-  column: ColumnType;
-};
-
-export type TaskProps = {
-  index: number;
-  task: TaskType;
-};
-
 export type TaskMove = {
   [
     sourceColumnId: number,

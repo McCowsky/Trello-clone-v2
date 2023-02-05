@@ -1,11 +1,14 @@
 import { Draggable } from "@hello-pangea/dnd";
-import { TaskProps } from "@/features/types";
+import { TaskType } from "@/features/types";
 import { useDeleteTask, useUpdateTaskName } from "@/features/tasks/mutations";
 import { useState, useRef } from "react";
 import { BsTrash } from "react-icons/Bs";
 import TextareaAutosize from "react-textarea-autosize";
 
-const Task: React.FC<TaskProps> = ({ index, task }) => {
+const Task: React.FC<{
+  index: number;
+  task: TaskType;
+}> = ({ index, task }) => {
   const { mutate: deleteTask } = useDeleteTask(task.columnID, task.ID);
   const { mutate: updateTask } = useUpdateTaskName(task.columnID, task.ID);
   const [inputValue, setInputValue] = useState(task.name);

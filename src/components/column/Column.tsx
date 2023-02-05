@@ -1,22 +1,22 @@
-import { ColumnProps, ColumnType, TaskType } from "../../features/types";
+import { ColumnType, TaskType } from "../../features/types";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { useGetTaskData } from "@/features/tasks/queries";
 import Task from "../task/Task";
 import { useAddTask } from "@/features/tasks/mutations";
 import { BiDotsHorizontalRounded, BiRepost } from "react-icons/Bi";
 import { useState, useRef, useEffect } from "react";
-import { useDeleteColumn, useUpdateColumnName } from "@/features/columns/mutations";
-import TextareaAutosize from "react-textarea-autosize";
+import { useDeleteColumn } from "@/features/columns/mutations";
+import ColumnNameInput from "./components/ColumnNameInput";
 
-const Column: React.FC<ColumnProps> = ({ index, column }) => {
+const Column: React.FC<{
+  index: number;
+  column: ColumnType;
+}> = ({ index, column }) => {
   const { data, status } = useGetTaskData(column.ID);
   const [columnMenuVisible, setColumnMenuVisible] = useState(false);
   const columnMenuRef = useRef<HTMLLIElement>(null);
-  const ref = useRef<HTMLTextAreaElement>(null);
-  const [inputValue, setInputValue] = useState<string>(column.name);
   const { mutate: addTask } = useAddTask(column.ID);
   const { mutate: deleteColumn } = useDeleteColumn(column.ID);
-  const { mutate: updateColumn } = useUpdateColumnName(column.ID);
 
   const newTask = (): void => {
     addTask(column.ID);
@@ -43,12 +43,6 @@ const Column: React.FC<ColumnProps> = ({ index, column }) => {
   const delColumn = (): void => {
     deleteColumn(column.ID);
   };
-  const handleFocus = (event: React.FormEvent<HTMLTextAreaElement>): void => {
-    if (column.name !== event.currentTarget.value) updateColumn(inputValue);
-  };
-  const handleChange = (event: React.FormEvent<HTMLTextAreaElement>): void => {
-    setInputValue(event.currentTarget.value);
-  };
 
   return status === "success" ? (
     <Draggable draggableId={column.ID.toString()} index={index} key={column.ID}>
@@ -71,15 +65,8 @@ const Column: React.FC<ColumnProps> = ({ index, column }) => {
                 className="px-2 py-1 flex justify-between"
                 {...provided.dragHandleProps}
               >
-                <TextareaAutosize
-                  rows={1}
-                  ref={ref}
-                  value={inputValue}
-                  onBlur={handleFocus}
-                  onChange={handleChange}
-                  className="bg-bg_column pl-2 h-7 w-full outline-none focus:shadow-[0_0_0_2px_rgba(0,121,191,1)] rounded-[3px] py-[2px]"
-                  autoFocus
-                />
+                <ColumnNameInput columnName={column.name} columnId={column.ID} />
+
                 <ul
                   className="flex justify-center items-center px-2 w-8 h-8 hover:bg-hover_grey_darker rounded"
                   onClick={columnMenu}

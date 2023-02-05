@@ -1,6 +1,6 @@
 import { useGetColumnsData, useGetColumnData } from "../../features/columns/queries";
 import { useGetBoardName } from "../../features/board/queries";
-import Board from "./board";
+import Board from "./Board";
 
 const BoardWrapper: React.FC = () => {
   const {
