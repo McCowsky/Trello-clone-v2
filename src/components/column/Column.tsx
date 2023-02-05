@@ -4,7 +4,7 @@ import { useGetTaskData } from "@/features/tasks/queries";
 import Task from "../task/Task";
 import { useAddTask } from "@/features/tasks/mutations";
 import { BiDotsHorizontalRounded, BiRepost } from "react-icons/Bi";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useDeleteColumn, useUpdateColumnName } from "@/features/columns/mutations";
 import TextareaAutosize from "react-textarea-autosize";
 
@@ -13,9 +13,7 @@ const Column: React.FC<ColumnProps> = ({ index, column }) => {
   const [columnMenuVisible, setColumnMenuVisible] = useState(false);
   const columnMenuRef = useRef<HTMLLIElement>(null);
   const ref = useRef<HTMLTextAreaElement>(null);
-
   const [inputValue, setInputValue] = useState<string>(column.name);
-
   const { mutate: addTask } = useAddTask(column.ID);
   const { mutate: deleteColumn } = useDeleteColumn(column.ID);
   const { mutate: updateColumn } = useUpdateColumnName(column.ID);
@@ -37,7 +35,10 @@ const Column: React.FC<ColumnProps> = ({ index, column }) => {
       setColumnMenuVisible(false);
     }
   };
-  document.addEventListener("mousedown", columnMenuClose);
+  useEffect(() => {
+    document.addEventListener("mousedown", columnMenuClose);
+    return () => document.removeEventListener("mousedown", columnMenuClose);
+  });
 
   const delColumn = (): void => {
     deleteColumn(column.ID);
