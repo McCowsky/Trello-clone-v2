@@ -14,7 +14,7 @@ const Column: React.FC<ColumnProps> = ({ index, column }) => {
   const columnMenuRef = useRef<HTMLLIElement>(null);
   const ref = useRef<HTMLTextAreaElement>(null);
 
-  const [inputValue, setInputValue] = useState(column.name);
+  const [inputValue, setInputValue] = useState<string>(column.name);
 
   const { mutate: addTask } = useAddTask(column.ID);
   const { mutate: deleteColumn } = useDeleteColumn(column.ID);
