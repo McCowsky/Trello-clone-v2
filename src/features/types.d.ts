@@ -35,11 +35,13 @@ export type TaskProps = {
 };
 
 export type TaskMove = {
-  sourceColumnId: number;
-  taskId: number;
-  destinationColumnID: number;
-  taskPositionInSource: number;
-  taskPositionInDest: number;
+  [
+    sourceColumnId: number,
+    taskId: number,
+    destinationColumnID: number,
+    taskPositionInSource: number,
+    taskPositionInDest: number,
+  ];
 };
 
 export type ColumnMove = {

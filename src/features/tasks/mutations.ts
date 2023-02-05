@@ -16,23 +16,16 @@ export const useMoveTask = (
     ["movetasks", [sourceColumnId, taskId, destColumnId, sourceOrder, destOrder]],
     moveTask,
     {
-      onMutate: async (params) => {
-        const colId = params[0];
-        const destId = params[2];
-        return { colId, destId };
-      },
-      onSuccess: (data) => {
-        if (data) {
-          queryClient.invalidateQueries({
-            queryKey: ["taskscolumn", Object.values(data)[0]],
-            exact: true,
-          });
+      onSuccess: (data: TaskMove) => {
+        queryClient.invalidateQueries({
+          queryKey: ["taskscolumn", Object.values(data)[0]],
+          exact: true,
+        });
 
-          queryClient.invalidateQueries({
-            queryKey: ["taskscolumn", Object.values(data)[2]],
-            exact: true,
-          });
-        }
+        queryClient.invalidateQueries({
+          queryKey: ["taskscolumn", Object.values(data)[2]],
+          exact: true,
+        });
       },
     }
   );

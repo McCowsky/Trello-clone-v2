@@ -13,11 +13,14 @@ export const moveTask = async ([
   sourceOrder,
   destOrder,
 ]: TaskMove[]) => {
-  const res = await axios.post(`/api/columns/${sourceColumnId}/tasks/${taskId}/move`, {
-    destinationColumnID: destColumnId,
-    taskPositionInSource: sourceOrder,
-    taskPositionInDest: destOrder,
-  });
+  const res = await axios.post<TaskMove>(
+    `/api/columns/${sourceColumnId}/tasks/${taskId}/move`,
+    {
+      destinationColumnID: destColumnId,
+      taskPositionInSource: sourceOrder,
+      taskPositionInDest: destOrder,
+    }
+  );
   return res.data;
 };
 

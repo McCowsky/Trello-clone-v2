@@ -104,7 +104,7 @@ export const handlers = [
     async (req, res, ctx) => {
       const { ID: sourceColumnID } = req.params;
       const { destinationColumnID, taskPositionInSource, taskPositionInDest } =
-        await req.json<TaskMove>();
+        await req.json();
 
       let tasks: TaskType[] = TASKS.filter((item) => item.columnID === +sourceColumnID);
       let tasksDest: TaskType[] = TASKS.filter(

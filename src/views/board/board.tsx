@@ -12,7 +12,7 @@ const Board: React.FC<BoardProps> = ({ columnData, boardData }) => {
   const { mutate: addColumn } = useAddColumn();
   const { mutate: updateBoardName } = useChangeBoardName();
 
-  const [inputValue, setInputValue] = useState(boardData.name);
+  const [inputValue, setInputValue] = useState<string>(boardData.name);
 
   const newColumn = (): void => {
     addColumn();
