@@ -1,9 +1,10 @@
 import { AxiosError, AxiosResponse } from "axios";
-import { useQuery, useMutation } from "react-query";
+import { useQuery } from "react-query";
 import { getTasks } from "./services";
+import { ColumnDetails } from "../types";
 
 export const useGetTaskData = (id: number) => {
-  return useQuery<AxiosResponse, AxiosError, AxiosResponse>(
+  return useQuery<AxiosResponse<ColumnDetails>, AxiosError, AxiosResponse<ColumnDetails>>(
     ["taskscolumn", id],
     getTasks
   );
