@@ -18,7 +18,7 @@ const BoardWrapper: React.FC = () => {
   if (columnError) return <div>`Error! ${columnError.message}`</div>;
   if (boardError) return <div>`Error! ${boardError.message}`</div>;
 
-  return <Board columnData={columnData?.data} boardData={boardData?.data} />;
+  return <Board columnData={columnData!.data} boardData={boardData?.data} />;
 };
 
 export default BoardWrapper;
