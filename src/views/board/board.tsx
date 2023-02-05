@@ -1,18 +1,18 @@
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
-import { ColumnType, BoardProps } from "@/features/types";
-import { useChangeBoardName } from "@/features/board/mutations";
+import { ColumnType } from "@/features/types";
 import Column from "@/components/column/Column";
 import { useMoveTask } from "@/features/tasks/mutations";
 import { useAddColumn, useMoveColumn } from "@/features/columns/mutations";
-import { useState } from "react";
+import BoardNameInput from "./components/BoardNameInput";
+import { BoardType } from "@/features/types";
 
-const Board: React.FC<BoardProps> = ({ columnData, boardData }) => {
+const Board: React.FC<{
+  columnData: ColumnType[];
+  boardData: BoardType;
+}> = ({ columnData, boardData }) => {
   const { mutate: moveTask } = useMoveTask(100, 200, 300, 400, 500);
   const { mutate: moveColumn } = useMoveColumn(100, 200, 300);
   const { mutate: addColumn } = useAddColumn();
-  const { mutate: updateBoardName } = useChangeBoardName();
-
-  const [inputValue, setInputValue] = useState<string>(boardData.name);
 
   const newColumn = (): void => {
     addColumn();
@@ -43,23 +43,10 @@ const Board: React.FC<BoardProps> = ({ columnData, boardData }) => {
     }
   };
 
-  const handleFocus = (event: React.FormEvent<HTMLInputElement>): void => {
-    if (boardData.name !== event.currentTarget.value) updateBoardName(inputValue);
-  };
-  const handleChange = (event: React.FormEvent<HTMLInputElement>): void => {
-    setInputValue(event.currentTarget.value);
-  };
-
   return (
     <div className="board h-full bg-inherit flex flex-col text-sm">
       <div className="pl-8 py-2">
-        <input
-          type="text"
-          value={inputValue}
-          onBlur={handleFocus}
-          onChange={handleChange}
-          className="bg-inherit text-white hover:bg-hover_grey active:bg-[#ffffff66] focus:bg-[#ffffff66] outline-none px-3 text-lg"
-        />
+        <BoardNameInput boardName={boardData.name} />
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="flex h-full px-4">

@@ -19,11 +19,6 @@ export type BoardType = {
   name: string;
 };
 
-export type BoardProps = {
-  columnData: ColumnType[];
-  boardData: BoardType;
-};
-
 export type ColumnProps = {
   index: number;
   column: ColumnType;
