@@ -2,9 +2,10 @@ import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import { ColumnType } from "@/features/types";
 import Column from "@/components/column/Column";
 import { useMoveTask } from "@/features/tasks/mutations";
-import { useAddColumn, useMoveColumn } from "@/features/columns/mutations";
+import { useMoveColumn } from "@/features/columns/mutations";
 import BoardNameInput from "./components/BoardNameInput";
 import { BoardType } from "@/features/types";
+import NewColumnButton from "./components/NewColumnButton";
 
 const Board: React.FC<{
   columnData: ColumnType[];
@@ -12,11 +13,6 @@ const Board: React.FC<{
 }> = ({ columnData, boardData }) => {
   const { mutate: moveTask } = useMoveTask(100, 200, 300, 400, 500);
   const { mutate: moveColumn } = useMoveColumn(100, 200, 300);
-  const { mutate: addColumn } = useAddColumn();
-
-  const newColumn = (): void => {
-    addColumn();
-  };
 
   const onDragEnd = (result: DropResult): void => {
     const { source, destination, draggableId, type } = result;
@@ -60,15 +56,7 @@ const Board: React.FC<{
               </div>
             )}
           </Droppable>
-
-          <button
-            className="bg-white/[0.24] text-white p-1 ml-1 mr-2 w-[272px] h-10 hover:bg-white/30 text-left rounded flex items-center"
-            onClick={newColumn}
-          >
-            <span className="text-2xl relative">
-              +<span className="text-sm">Add another list</span>
-            </span>
-          </button>
+          <NewColumnButton />
         </div>
       </DragDropContext>
     </div>
