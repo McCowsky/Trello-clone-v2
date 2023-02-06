@@ -1,4 +1,4 @@
-import { Draggable, Droppable } from "@hello-pangea/dnd";
+import { Droppable } from "@hello-pangea/dnd";
 import { Task } from "../../task";
 
 import { ColumnDetails, ColumnType, TaskType } from "../../../features/types";

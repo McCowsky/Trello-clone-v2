@@ -16,16 +16,25 @@ const ColumnNameInput: React.FC<{ columnName: string; columnId: number }> = ({
   const handleChange = (event: React.FormEvent<HTMLTextAreaElement>): void => {
     setInputValue(event.currentTarget.value);
   };
+
+  const setFocus = (): void => {
+    ref.current?.focus();
+  };
+
   return (
-    <TextareaAutosize
-      rows={1}
-      ref={ref}
-      value={inputValue}
-      onBlur={handleFocus}
-      onChange={handleChange}
-      className="bg-bg_column pl-2 h-7 w-full outline-none focus:shadow-[0_0_0_2px_rgba(0,121,191,1)] rounded-[3px] py-[2px] resize-none"
-      autoFocus
-    />
+    <div className="relative w-full">
+      <TextareaAutosize
+        rows={1}
+        ref={ref}
+        value={inputValue}
+        onBlur={handleFocus}
+        onChange={handleChange}
+        className="bg-bg_column pl-2 h-7 w-full outline-none focus:shadow-[0_0_0_2px_rgba(0,121,191,1)] rounded-[3px] py-[2px] resize-none "
+        autoFocus
+        id="columnName"
+      />
+      <div className="absolute top-0 w-full h-full" onClick={setFocus}></div>
+    </div>
   );
 };
 
