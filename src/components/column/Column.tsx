@@ -43,7 +43,6 @@ const Column: React.FC<{
   const newTask = (): void => {
     addTask(column.ID);
   };
-  console.log(data?.data);
   return status === "success" ? (
     <Draggable draggableId={column.ID.toString()} index={index} key={column.ID}>
       {(provided, snapshot) => (
