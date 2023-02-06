@@ -1,11 +1,12 @@
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import { ColumnType } from "@/features/types";
-import Column from "@/components/column/Column";
 import { useMoveTask } from "@/features/tasks/mutations";
 import { useMoveColumn } from "@/features/columns/mutations";
 import BoardNameInput from "./components/BoardNameInput";
 import { BoardType } from "@/features/types";
 import NewColumnButton from "./components/NewColumnButton";
+import BoardDropArea from "./components/BoardDropArea";
+import { BiLogIn } from "react-icons/Bi";
 
 const Board: React.FC<{
   columnData: ColumnType[];
@@ -38,6 +39,7 @@ const Board: React.FC<{
       ]);
     }
   };
+  console.log(columnData);
 
   return (
     <div className="board h-full bg-inherit flex flex-col text-sm">
@@ -46,16 +48,7 @@ const Board: React.FC<{
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="flex h-full px-4">
-          <Droppable droppableId="board" type="board" direction="horizontal">
-            {(provided, snapshot) => (
-              <div className="flex w-fit h-fit" ref={provided.innerRef}>
-                {columnData.map((column: ColumnType, index: number) => (
-                  <Column column={column} index={index} key={column.ID} />
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
+          <BoardDropArea columnData={columnData} />
           <NewColumnButton />
         </div>
       </DragDropContext>
