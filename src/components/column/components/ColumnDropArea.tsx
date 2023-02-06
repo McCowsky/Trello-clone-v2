@@ -1,5 +1,6 @@
 import { Draggable, Droppable } from "@hello-pangea/dnd";
-import Task from "../../task/Task";
+import { Task } from "../../task";
+
 import { ColumnDetails, ColumnType, TaskType } from "../../../features/types";
 
 const ColumnDropArea: React.FC<{ columnId: number; data: ColumnDetails }> = ({

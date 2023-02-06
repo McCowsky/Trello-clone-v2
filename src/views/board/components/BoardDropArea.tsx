@@ -1,6 +1,6 @@
 import { Droppable } from "@hello-pangea/dnd";
 import { ColumnType } from "@/features/types";
-import Column from "@/components/column/Column";
+import { Column } from "@/components/column";
 
 const BoardDropArea: React.FC<{ columnData: ColumnType[] }> = ({ columnData }) => {
   return (
