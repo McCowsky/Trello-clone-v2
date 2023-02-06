@@ -12,20 +12,27 @@ export const useMoveTask = (
 ) => {
   const queryClient = useQueryClient();
 
-  return useMutation<TaskMove, AxiosError, TaskMove[]>(
+  return useMutation(
     ["movetasks", [sourceColumnId, taskId, destColumnId, sourceOrder, destOrder]],
     moveTask,
     {
-      onSuccess: (data: TaskMove) => {
-        queryClient.invalidateQueries({
-          queryKey: ["taskscolumn", Object.values(data)[0]],
-          exact: true,
-        });
+      onMutate: async (params) => {
+        const colId = params[0];
+        const destId = params[2];
+        return { colId, destId };
+      },
+      onSuccess: (err, variables, context) => {
+        if (context) {
+          queryClient.invalidateQueries({
+            queryKey: ["taskscolumn", +context?.colId],
+            exact: true,
+          });
 
-        queryClient.invalidateQueries({
-          queryKey: ["taskscolumn", Object.values(data)[2]],
-          exact: true,
-        });
+          queryClient.invalidateQueries({
+            queryKey: ["taskscolumn", +context?.destId],
+            exact: true,
+          });
+        }
       },
     }
   );

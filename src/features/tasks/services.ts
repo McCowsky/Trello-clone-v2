@@ -6,22 +6,18 @@ export const getTasks = (id: QueryFunctionContext) => {
   return axios.get<ColumnDetails>(`/api/columns/${id.queryKey[1]}`);
 };
 
-export const moveTask = async ([
+export const moveTask = ([
   sourceColumnId,
   taskId,
   destColumnId,
   sourceOrder,
   destOrder,
-]: TaskMove[]) => {
-  const res = await axios.post<TaskMove>(
-    `/api/columns/${sourceColumnId}/tasks/${taskId}/move`,
-    {
-      destinationColumnID: destColumnId,
-      taskPositionInSource: sourceOrder,
-      taskPositionInDest: destOrder,
-    }
-  );
-  return res.data;
+]: number[]) => {
+  return axios.post(`/api/columns/${sourceColumnId}/tasks/${taskId}/move`, {
+    destinationColumnID: destColumnId,
+    taskPositionInSource: sourceOrder,
+    taskPositionInDest: destOrder,
+  });
 };
 
 export const addTask = async (id: number) => {
