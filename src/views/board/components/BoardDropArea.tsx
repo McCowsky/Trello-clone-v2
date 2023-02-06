@@ -2,7 +2,7 @@ import { Droppable } from "@hello-pangea/dnd";
 import { ColumnType } from "@/features/types";
 import Column from "@/components/column/Column";
 
-const BoardDropArea: React.FC<{ columnData: any }> = ({ columnData }) => {
+const BoardDropArea: React.FC<{ columnData: ColumnType[] }> = ({ columnData }) => {
   return (
     <Droppable droppableId="board" type="board" direction="horizontal">
       {(provided, snapshot) => (

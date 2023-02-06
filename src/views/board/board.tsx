@@ -6,7 +6,6 @@ import BoardNameInput from "./components/BoardNameInput";
 import { BoardType } from "@/features/types";
 import NewColumnButton from "./components/NewColumnButton";
 import BoardDropArea from "./components/BoardDropArea";
-import { BiLogIn } from "react-icons/Bi";
 
 const Board: React.FC<{
   columnData: ColumnType[];
@@ -39,7 +38,6 @@ const Board: React.FC<{
       ]);
     }
   };
-  console.log(columnData);
 
   return (
     <div className="board h-full bg-inherit flex flex-col text-sm">

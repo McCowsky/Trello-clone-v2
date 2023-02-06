@@ -43,7 +43,7 @@ const Column: React.FC<{
   const newTask = (): void => {
     addTask(column.ID);
   };
-
+  console.log(data?.data);
   return status === "success" ? (
     <Draggable draggableId={column.ID.toString()} index={index} key={column.ID}>
       {(provided, snapshot) => (
@@ -111,7 +111,7 @@ const Column: React.FC<{
                 </ul>
               </div>
               <div className="flex flex-col">
-                <ColumnDropArea columnId={column.ID} data={data} />
+                <ColumnDropArea columnId={column.ID} data={data!.data} />
                 <NewTaskButton columnId={column.ID} newTask={newTask} />
               </div>
             </div>
