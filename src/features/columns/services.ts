@@ -1,8 +1,8 @@
-import axios from "axios";
-import { ColumnMove, ColumnType } from "../types";
+import axios from 'axios';
+import { ColumnMove, ColumnType } from '../types';
 
 export const getColumns = () => {
-  return axios.get<ColumnType[]>("/api/columns");
+  return axios.get<ColumnType[]>('/api/columns');
 };
 
 export const getColumn = async (id: number) => {
@@ -25,19 +25,15 @@ export const updateColumn = async (id: number, name: string) => {
     id: number;
     name: string;
   }>(`/api/columns/${id}`, {
-    name: name,
+    name: name
   });
   return res.data;
 };
 
-export const moveColumn = async ([
-  columnId,
-  sourcePosition,
-  destPosition,
-]: ColumnMove[]) => {
+export const moveColumn = async ([columnId, sourcePosition, destPosition]: ColumnMove[]) => {
   const res = await axios.post<ColumnMove>(`/api/columns/${columnId}/move`, {
     sourcePosition: sourcePosition,
-    destPosition: destPosition,
+    destPosition: destPosition
   });
 
   return res.data;

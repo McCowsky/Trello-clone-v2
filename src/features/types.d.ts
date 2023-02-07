@@ -25,7 +25,7 @@ export type TaskMove = {
     taskId: number,
     destinationColumnID: number,
     taskPositionInSource: number,
-    taskPositionInDest: number,
+    taskPositionInDest: number
   ];
 };
 

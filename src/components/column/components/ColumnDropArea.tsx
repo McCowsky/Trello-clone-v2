@@ -1,11 +1,11 @@
-import { Droppable } from "@hello-pangea/dnd";
-import { Task } from "../../task";
+import { Droppable } from '@hello-pangea/dnd';
+import { Task } from '../../task';
 
-import { ColumnDetails, ColumnType, TaskType } from "../../../features/types";
+import { ColumnDetails, TaskType } from '../../../features/types';
 
 const ColumnDropArea: React.FC<{ columnId: number; data: ColumnDetails }> = ({
   columnId,
-  data,
+  data
 }) => {
   return (
     <Droppable droppableId={columnId.toString()} type="column">
@@ -14,10 +14,9 @@ const ColumnDropArea: React.FC<{ columnId: number; data: ColumnDetails }> = ({
           {...provided.droppableProps}
           ref={provided.innerRef}
           style={{
-            background: snapshot.isDraggingOver ? "hover_grey_darker" : "bg_column",
+            background: snapshot.isDraggingOver ? 'hover_grey_darker' : 'bg_column'
           }}
-          className="min-h-[5px] h-fit max-h-[calc(100vh-185px)] px-2 overflow-y-auto"
-        >
+          className="min-h-[5px] h-fit max-h-[calc(100vh-185px)] px-2 overflow-y-auto">
           {data.tasks.map((task: TaskType, index: number) => (
             <Task task={task} index={index} key={task.ID} />
           ))}

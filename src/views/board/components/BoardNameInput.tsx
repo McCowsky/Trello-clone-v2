@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useChangeBoardName } from "@/features/board/mutations";
+import { useState } from 'react';
+import { useChangeBoardName } from '@/features/board/mutations';
 
 const BoardNameInput: React.FC<{ boardName: string }> = ({ boardName }) => {
   const { mutate: updateBoardName } = useChangeBoardName();

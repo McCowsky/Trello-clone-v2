@@ -1,7 +1,6 @@
-import { useMutation, useQueryClient } from "react-query";
-import { moveTask, addTask, deleteTask, updateTask } from "./services";
-import { AxiosError } from "axios";
-import { TaskMove } from "../types";
+import { useMutation, useQueryClient } from 'react-query';
+import { moveTask, addTask, deleteTask, updateTask } from './services';
+import { AxiosError } from 'axios';
 
 export const useMoveTask = (
   sourceColumnId: number,
@@ -13,7 +12,7 @@ export const useMoveTask = (
   const queryClient = useQueryClient();
 
   return useMutation(
-    ["movetasks", [sourceColumnId, taskId, destColumnId, sourceOrder, destOrder]],
+    ['movetasks', [sourceColumnId, taskId, destColumnId, sourceOrder, destOrder]],
     moveTask,
     {
       onMutate: async (params) => {
@@ -24,16 +23,16 @@ export const useMoveTask = (
       onSuccess: (err, variables, context) => {
         if (context) {
           queryClient.invalidateQueries({
-            queryKey: ["taskscolumn", +context?.colId],
-            exact: true,
+            queryKey: ['taskscolumn', +context?.colId],
+            exact: true
           });
 
           queryClient.invalidateQueries({
-            queryKey: ["taskscolumn", +context?.destId],
-            exact: true,
+            queryKey: ['taskscolumn', +context?.destId],
+            exact: true
           });
         }
-      },
+      }
     }
   );
 };
@@ -41,16 +40,16 @@ export const useMoveTask = (
 export const useAddTask = (id: number) => {
   const queryClient = useQueryClient();
   return useMutation<number, AxiosError, number>(
-    ["addtasks", id],
+    ['addtasks', id],
     () => {
       return addTask(id);
     },
     {
       onSuccess: () =>
         queryClient.invalidateQueries({
-          queryKey: ["taskscolumn", id],
-          exact: true,
-        }),
+          queryKey: ['taskscolumn', id],
+          exact: true
+        })
     }
   );
 };
@@ -58,16 +57,16 @@ export const useAddTask = (id: number) => {
 export const useDeleteTask = (id: number, taskId: number) => {
   const queryClient = useQueryClient();
   return useMutation<number[], AxiosError, number[]>(
-    ["deltasks", [id, taskId]],
+    ['deltasks', [id, taskId]],
     () => {
       return deleteTask([id, taskId]);
     },
     {
       onSuccess: () =>
         queryClient.invalidateQueries({
-          queryKey: ["taskscolumn", id],
-          exact: true,
-        }),
+          queryKey: ['taskscolumn', id],
+          exact: true
+        })
     }
   );
 };
@@ -84,16 +83,16 @@ export const useUpdateTaskName = (columnId: number, taskId: number) => {
     AxiosError,
     string
   >(
-    ["updatecolumn", [columnId, taskId, name]],
+    ['updatecolumn', [columnId, taskId, name]],
     (name) => {
       return updateTask(columnId, taskId, name);
     },
     {
       onSuccess: () =>
         queryClient.invalidateQueries({
-          queryKey: ["taskscolumn", columnId],
-          exact: true,
-        }),
+          queryKey: ['taskscolumn', columnId],
+          exact: true
+        })
     }
   );
 };

@@ -1,86 +1,85 @@
-import { rest } from "msw";
+import { rest } from 'msw';
 import {
   ColumnType,
   ColumnDetails,
   TaskType,
   TaskMove,
   ColumnMove,
-  BoardType,
-  Params,
-} from "../features/types";
+  BoardType
+} from '../features/types';
 
-let BOARD: BoardType = {
-  name: "default",
+const BOARD: BoardType = {
+  name: 'default'
 };
 
 let COLUMNS: ColumnType[] = [
   {
     ID: 0,
-    name: "TO DO",
-    order: 0,
+    name: 'TO DO',
+    order: 0
   },
   {
     ID: 1,
-    name: "In Progress",
-    order: 1,
-  },
+    name: 'In Progress',
+    order: 1
+  }
 ];
 
 let TASKS: TaskType[] = [
   {
     ID: 100,
     columnID: 0,
-    name: "asdasdasdasdasdasd",
-    order: 0,
+    name: 'asdasdasdasdasdasd',
+    order: 0
   },
   {
     ID: 101,
     columnID: 1,
-    name: "aaaaaaaaaaaaaaaaa",
-    order: 0,
+    name: 'aaaaaaaaaaaaaaaaa',
+    order: 0
   },
   {
     ID: 102,
     columnID: 1,
-    name: "cccccccccccccccccccc",
-    order: 1,
+    name: 'cccccccccccccccccccc',
+    order: 1
   },
   {
     ID: 103,
     columnID: 1,
-    name: "ddddddddddddddddddddd",
-    order: 3,
+    name: 'ddddddddddddddddddddd',
+    order: 3
   },
   {
     ID: 104,
     columnID: 1,
-    name: "eeeeeeeeeeeeeeeeeee",
-    order: 2,
+    name: 'eeeeeeeeeeeeeeeeeee',
+    order: 2
   },
   {
     ID: 105,
     columnID: 0,
-    name: "bbbbbbbbbbbbbbb",
-    order: 1,
-  },
+    name: 'bbbbbbbbbbbbbbb',
+    order: 1
+  }
 ];
 
 export const handlers = [
-  rest.get<BoardType>("/api/board", async (_, res, ctx) => {
+  rest.get<BoardType>('/api/board', async (_, res, ctx) => {
     return res(ctx.status(200), ctx.json<BoardType>(BOARD));
   }),
 
-  rest.patch("/api/board", async (req, res, ctx) => {
+  rest.patch('/api/board', async (req, res, ctx) => {
     BOARD.name = (await req.json<BoardType>()).name;
     return res(ctx.status(200));
   }),
 
-  rest.get<ColumnType[]>("/api/columns", async (_, res, ctx) => {
+  rest.get<ColumnType[]>('/api/columns', async (_, res, ctx) => {
     COLUMNS = COLUMNS.sort((a: ColumnType, b: ColumnType) => a.order - b.order);
     return res(ctx.status(200), ctx.json<ColumnType[]>(COLUMNS));
   }),
 
-  rest.get<ColumnDetails, { ID: string }>("/api/columns/:ID", async (req, res, ctx) => {
+  rest.get<ColumnDetails, { ID: string }>('/api/columns/:ID', async (req, res, ctx) => {
     const { ID } = req.params;
     const board: ColumnType | undefined = COLUMNS.find((b) => b.ID === +ID);
 
@@ -94,28 +93,22 @@ export const handlers = [
       ctx.status(200),
       ctx.json<ColumnDetails>({
         ...board,
-        tasks,
+        tasks
       })
     );
   }),
 
   rest.post<TaskMove, { ID: string }>(
-    "/api/columns/:ID/tasks/:taskID/move",
+    '/api/columns/:ID/tasks/:taskID/move',
     async (req, res, ctx) => {
       const { ID: sourceColumnID } = req.params;
-      const { destinationColumnID, taskPositionInSource, taskPositionInDest } =
-        await req.json();
+      const { destinationColumnID, taskPositionInSource, taskPositionInDest } = await req.json();
 
-      let tasks: TaskType[] = TASKS.filter((item) => item.columnID === +sourceColumnID);
-      let tasksDest: TaskType[] = TASKS.filter(
-        (item) => item.columnID === +destinationColumnID
-      );
+      const tasks: TaskType[] = TASKS.filter((item) => item.columnID === +sourceColumnID);
+      const tasksDest: TaskType[] = TASKS.filter((item) => item.columnID === +destinationColumnID);
 
-      let task: TaskType | undefined = tasks.find(
-        (o) => o.order === taskPositionInSource
-      );
-
-      task!.order = taskPositionInDest;
+      const task: TaskType | undefined = tasks.find((o) => o.order === taskPositionInSource);
+      if (task != undefined) task.order = taskPositionInDest;
 
       if (+sourceColumnID === +destinationColumnID) {
         if (taskPositionInSource !== taskPositionInDest)
@@ -155,9 +148,9 @@ export const handlers = [
             }
           }
       } else {
-        task!.columnID = +destinationColumnID;
+        if (task != undefined) task.columnID = +destinationColumnID;
 
-        tasks.forEach((item, index) => {
+        tasks.forEach((item) => {
           if (item.order > taskPositionInSource && item.ID !== task?.ID) {
             item.order -= 1;
           }
@@ -176,8 +169,7 @@ export const handlers = [
         });
 
         TASKS = TASKS.filter(
-          (item) =>
-            item.columnID !== +sourceColumnID && item.columnID !== +destinationColumnID
+          (item) => item.columnID !== +sourceColumnID && item.columnID !== +destinationColumnID
         );
         TASKS = TASKS.concat(tasks, tasksDest);
       }
@@ -185,7 +177,7 @@ export const handlers = [
     }
   ),
 
-  rest.post("/api/columns", async (req, res, ctx) => {
+  rest.post('/api/columns', async (req, res, ctx) => {
     let columnID: number = Math.max(
       ...COLUMNS.map((o) => {
         return o.ID + 1;
@@ -198,14 +190,14 @@ export const handlers = [
 
     COLUMNS.push({
       ID: columnID,
-      name: "",
-      order: columnOrder,
+      name: '',
+      order: columnOrder
     });
 
     return res(ctx.status(200));
   }),
 
-  rest.delete<ColumnType, { ID: string }>("/api/columns/:ID", async (req, res, ctx) => {
+  rest.delete<ColumnType, { ID: string }>('/api/columns/:ID', async (req, res, ctx) => {
     const { ID } = req.params;
     const board: ColumnType | undefined = COLUMNS.find((b) => b.ID === +ID);
 
@@ -219,7 +211,7 @@ export const handlers = [
     return res(ctx.status(200));
   }),
 
-  rest.patch<ColumnType, { ID: string }>("/api/columns/:ID", async (req, res, ctx) => {
+  rest.patch<ColumnType, { ID: string }>('/api/columns/:ID', async (req, res, ctx) => {
     const { ID } = req.params;
     const newValues = await req.json<Partial<ColumnType>>();
     const board: ColumnType | undefined = COLUMNS.find((b) => b.ID === +ID);
@@ -235,14 +227,14 @@ export const handlers = [
 
       return {
         ...b,
-        ...newValues,
+        ...newValues
       };
     });
 
     return res(ctx.status(200));
   }),
 
-  rest.post<TaskType, { ID: string }>("/api/columns/:ID/tasks", async (req, res, ctx) => {
+  rest.post<TaskType, { ID: string }>('/api/columns/:ID/tasks', async (req, res, ctx) => {
     const { ID } = req.params;
     let taskID: number = Math.max(
       ...TASKS.map((o) => {
@@ -263,21 +255,21 @@ export const handlers = [
 
     const task: TaskType = {
       ID: taskID,
-      name: "",
+      name: '',
       order: taskOrder,
-      columnID: -1,
+      columnID: -1
     };
 
     TASKS.push({
       ...task,
-      columnID: +ID,
+      columnID: +ID
     });
 
     return res(ctx.status(200));
   }),
 
   rest.delete<TaskType, { columnID: string; ID: string }>(
-    "/api/columns/:columnID/tasks/:ID",
+    '/api/columns/:columnID/tasks/:ID',
     async (req, res, ctx) => {
       const { columnID, ID } = req.params;
 
@@ -290,10 +282,10 @@ export const handlers = [
       }
 
       TASKS = TASKS.filter((b) => b.columnID !== +columnID || b.ID !== +ID);
-      let tasks: TaskType[] = TASKS.filter((item) => item.columnID === +columnID);
+      const tasks: TaskType[] = TASKS.filter((item) => item.columnID === +columnID);
 
       tasks.forEach((item) => {
-        if (item.order > task!.order) {
+        if (item.order > task.order) {
           item.order -= 1;
         }
       });
@@ -304,7 +296,7 @@ export const handlers = [
   ),
 
   rest.patch<TaskType, { columnID: string; ID: string }>(
-    "/api/columns/:columnID/tasks/:ID",
+    '/api/columns/:columnID/tasks/:ID',
     async (req, res, ctx) => {
       const { columnID, ID } = req.params;
       const newValues = await req.json<Partial<TaskType>>();
@@ -323,57 +315,54 @@ export const handlers = [
 
         return {
           ...b,
-          ...newValues,
+          ...newValues
         };
       });
       return res(ctx.status(200));
     }
   ),
 
-  rest.post<ColumnMove, { ID: string }>(
-    "/api/columns/:ID/move",
-    async (req, res, ctx) => {
-      const { ID } = req.params;
-      const { sourcePosition, destPosition } = await req.json();
-      const column: ColumnType | undefined = COLUMNS.find((b) => b.ID === +ID);
-      column!.order = destPosition;
+  rest.post<ColumnMove, { ID: string }>('/api/columns/:ID/move', async (req, res, ctx) => {
+    const { ID } = req.params;
+    const { sourcePosition, destPosition } = await req.json();
+    const column: ColumnType | undefined = COLUMNS.find((b) => b.ID === +ID);
+    if (column != undefined) column.order = destPosition;
 
-      if (sourcePosition === 0) {
+    if (sourcePosition === 0) {
+      COLUMNS.forEach((item) => {
+        if (item.order <= destPosition && item.ID !== column?.ID) {
+          item.order -= 1;
+        }
+      });
+    } else if (sourcePosition === COLUMNS.length - 1) {
+      COLUMNS.forEach((item) => {
+        if (item.order >= destPosition && item.ID !== column?.ID) {
+          item.order += 1;
+        }
+      });
+    } else {
+      if (sourcePosition < destPosition) {
         COLUMNS.forEach((item) => {
-          if (item.order <= destPosition && item.ID !== column?.ID) {
+          if (
+            item.order >= sourcePosition &&
+            item.order <= destPosition &&
+            item.ID !== column?.ID
+          ) {
             item.order -= 1;
           }
         });
-      } else if (sourcePosition === COLUMNS.length - 1) {
+      } else {
         COLUMNS.forEach((item) => {
-          if (item.order >= destPosition && item.ID !== column?.ID) {
+          if (
+            item.order <= sourcePosition &&
+            item.order >= destPosition &&
+            item.ID !== column?.ID
+          ) {
             item.order += 1;
           }
         });
-      } else {
-        if (sourcePosition < destPosition) {
-          COLUMNS.forEach((item) => {
-            if (
-              item.order >= sourcePosition &&
-              item.order <= destPosition &&
-              item.ID !== column?.ID
-            ) {
-              item.order -= 1;
-            }
-          });
-        } else {
-          COLUMNS.forEach((item) => {
-            if (
-              item.order <= sourcePosition &&
-              item.order >= destPosition &&
-              item.ID !== column?.ID
-            ) {
-              item.order += 1;
-            }
-          });
-        }
       }
-      return res(ctx.status(200));
     }
-  ),
+    return res(ctx.status(200));
+  })
 ];

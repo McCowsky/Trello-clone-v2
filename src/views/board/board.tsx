@@ -1,11 +1,11 @@
-import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
-import { ColumnType } from "@/features/types";
-import { useMoveTask } from "@/features/tasks/mutations";
-import { useMoveColumn } from "@/features/columns/mutations";
-import BoardNameInput from "./components/BoardNameInput";
-import { BoardType } from "@/features/types";
-import NewColumnButton from "./components/NewColumnButton";
-import BoardDropArea from "./components/BoardDropArea";
+import { DragDropContext, DropResult } from '@hello-pangea/dnd';
+import { ColumnType } from '@/features/types';
+import { useMoveTask } from '@/features/tasks/mutations';
+import { useMoveColumn } from '@/features/columns/mutations';
+import BoardNameInput from './components/BoardNameInput';
+import { BoardType } from '@/features/types';
+import NewColumnButton from './components/NewColumnButton';
+import BoardDropArea from './components/BoardDropArea';
 
 const Board: React.FC<{
   columnData: ColumnType[];
@@ -17,16 +17,13 @@ const Board: React.FC<{
   const onDragEnd = (result: DropResult): void => {
     const { source, destination, draggableId, type } = result;
 
-    if (
-      source.index === destination?.index &&
-      source.droppableId === destination.droppableId
-    )
+    if (source.index === destination?.index && source.droppableId === destination.droppableId)
       return;
-    if (type === "board") {
-      moveColumn([+draggableId, source.index, destination!.index]);
+    if (type === 'board' && destination != undefined) {
+      moveColumn([+draggableId, source.index, destination.index]);
     }
 
-    if (type === "column") {
+    if (type === 'column') {
       if (!destination) return;
 
       moveTask([
@@ -34,7 +31,7 @@ const Board: React.FC<{
         +draggableId,
         +destination.droppableId,
         source.index,
-        destination.index,
+        destination.index
       ]);
     }
   };

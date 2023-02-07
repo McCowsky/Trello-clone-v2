@@ -1,6 +1,6 @@
-import { Router, Outlet, ReactLocation } from "@tanstack/react-location";
-import { Navbar } from "@/components/navbar";
-import { routes } from "@/router/routes";
+import { Router, Outlet, ReactLocation } from '@tanstack/react-location';
+import { Navbar } from '@/components/navbar';
+import { routes } from '@/router/routes';
 
 const location = new ReactLocation();
 

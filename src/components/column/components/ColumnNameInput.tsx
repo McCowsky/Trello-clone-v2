@@ -1,10 +1,10 @@
-import TextareaAutosize from "react-textarea-autosize";
-import { useState, useRef, useEffect } from "react";
-import { useDeleteColumn, useUpdateColumnName } from "@/features/columns/mutations";
+import TextareaAutosize from 'react-textarea-autosize';
+import { useState, useRef } from 'react';
+import { useUpdateColumnName } from '@/features/columns/mutations';
 
 const ColumnNameInput: React.FC<{ columnName: string; columnId: number }> = ({
   columnName,
-  columnId,
+  columnId
 }) => {
   const [inputValue, setInputValue] = useState<string>(columnName);
   const { mutate: updateColumn } = useUpdateColumnName(columnId);

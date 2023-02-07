@@ -1,6 +1,6 @@
-import axios from "axios";
-import { QueryFunctionContext } from "react-query";
-import { ColumnDetails, TaskMove } from "../types";
+import axios from 'axios';
+import { QueryFunctionContext } from 'react-query';
+import { ColumnDetails } from '../types';
 
 export const getTasks = (id: QueryFunctionContext) => {
   return axios.get<ColumnDetails>(`/api/columns/${id.queryKey[1]}`);
@@ -11,12 +11,12 @@ export const moveTask = ([
   taskId,
   destColumnId,
   sourceOrder,
-  destOrder,
+  destOrder
 ]: number[]) => {
   return axios.post<number>(`/api/columns/${sourceColumnId}/tasks/${taskId}/move`, {
     destinationColumnID: destColumnId,
     taskPositionInSource: sourceOrder,
-    taskPositionInDest: destOrder,
+    taskPositionInDest: destOrder
   });
 };
 
@@ -36,7 +36,7 @@ export const updateTask = async (columnId: number, taskId: number, name: string)
     taskId: number;
     name: string;
   }>(`/api/columns/${columnId}/tasks/${taskId}`, {
-    name: name,
+    name: name
   });
 
   return await res.data;

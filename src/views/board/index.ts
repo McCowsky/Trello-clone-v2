@@ -1,1 +1,1 @@
-export { default as BoardWrapper } from "./BoardWrapper";
+export { default as BoardWrapper } from './BoardWrapper';
