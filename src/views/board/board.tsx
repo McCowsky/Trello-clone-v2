@@ -37,7 +37,7 @@ const Board: React.FC<{
   };
 
   return (
-    <div className="board h-full bg-inherit flex flex-col text-sm">
+    <div className="board h-full bg-inherit flex flex-col text-sm" data-testid="boardName">
       <div className="pl-8 py-2">
         <BoardNameInput boardName={boardData.name} />
       </div>

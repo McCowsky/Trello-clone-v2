@@ -29,37 +29,25 @@ let TASKS: TaskType[] = [
   {
     ID: 100,
     columnID: 0,
-    name: 'asdasdasdasdasdasd',
+    name: 'first',
     order: 0
   },
   {
     ID: 101,
     columnID: 1,
-    name: 'aaaaaaaaaaaaaaaaa',
+    name: 'second',
     order: 0
   },
   {
     ID: 102,
     columnID: 1,
-    name: 'cccccccccccccccccccc',
+    name: 'third',
     order: 1
   },
   {
     ID: 103,
-    columnID: 1,
-    name: 'ddddddddddddddddddddd',
-    order: 3
-  },
-  {
-    ID: 104,
-    columnID: 1,
-    name: 'eeeeeeeeeeeeeeeeeee',
-    order: 2
-  },
-  {
-    ID: 105,
     columnID: 0,
-    name: 'bbbbbbbbbbbbbbb',
+    name: 'fourth',
     order: 1
   }
 ];

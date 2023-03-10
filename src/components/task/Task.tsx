@@ -16,7 +16,7 @@ const Task: React.FC<{
     deleteTask([task.columnID, task.ID]);
   };
 
-  const trashChange = () => {
+  const trashChange = (): void => {
     setTrashVisible((prev) => !prev);
   };
 

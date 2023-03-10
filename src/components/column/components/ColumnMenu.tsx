@@ -14,7 +14,7 @@ const ColumnMenu: React.FC<{ columnId: number; newTask: () => void }> = ({ colum
       as="div"
       className="relative h-8 w-8 hover:bg-hover_grey_darker rounded flex justify-center items-center">
       <Menu.Button>
-        <div className="w-8 h-8 flex justify-center items-center">
+        <div className="w-8 h-8 flex justify-center items-center" data-testid="columnMenu">
           <BiDotsHorizontalRounded className="" />
         </div>
       </Menu.Button>
